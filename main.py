@@ -2,14 +2,16 @@ from kivy.lang.builder import Builder
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from datetime import datetime
-from kivy.uix.camera import Camera 
+from kivymd.uix.button import MDFlatButton,MDRaisedButton, MDRectangleFlatButton
+from kivymd.uix.card import MDSeparator
+from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.card import MDCard
 
 KV = '''
 CustomScreenManager:
     HomeScreen:
     NameScreen:
     CheckScreen:
-    
 
 <HomeScreen>:
     name: 'home'
@@ -22,24 +24,9 @@ CustomScreenManager:
             pos: self.pos
     
     MDTopAppBar:
-        type: "small"
-        size_hint_x: 1
-        pos_hint: {"top": 1}
-        MDTopAppBarTitle:
-            text: "QuickMark"
-            theme_text_color: "Custom"
-            text_color: .5, 0, .5, 1
-        MDTopAppBarTrailingButtonContainer:
-            MDIconButton:
-                icon: "plus-circle"
-                pos_hint: {"center_y": 0.5}
-                theme_font_size: "Custom"
-                font_size: "40sp"
-                radius: [self.height / 2,]
-                size_hint: None, None
-                size: "84dp", "84dp"
-                on_press: root.manager.current = 'name' 
-
+        title: "QuickMark"
+        pos_hint: {"top": 1,}
+        right_action_items: [["plus-circle", lambda x: setattr(root.manager, 'current', 'name')]]
 
 <NameScreen>:
     name: 'name'
@@ -56,91 +43,79 @@ CustomScreenManager:
         text: ""
         halign: "center"
         pos_hint: {"top": 1.33}
-        theme_text_color: "Custom"
-        text_color: 0, 0, 0, 1
+        
 
     MDTopAppBar:
-        type: "small"
-        size_hint_x: 1
+        title: "QuickMark"
         pos_hint: {"top": 1}
-        
-        MDTopAppBarTitle:
-            text: "QuickMark"
-            theme_text_color: "Custom"
-            text_color: .5, 0, .5, 1
-    
+
     MDTextField:
         id: text_field
-        mode: "outlined"
+        mode: "rectangle"
         size_hint_x: None
         width: "240dp"
         pos_hint: {"top":.879, "center_x": .5}
+        hint_text: "Name of test"
         on_text_validate: app.update_label(self)
-
-        MDTextFieldHintText:
-            text: "Name of test"
-
-        MDTextFieldTrailingIcon:
-            icon: "content-save"
-
-    MDButton:
-        style: "text"
-        pos_hint: {'x': .7, 'y': .8}
+    
+    MDRaisedButton:
+        text: "SAVE"
+        pos_hint:{"top":.85, "center_x": .7}
         on_press: app.save_and_display_text()
 
-        MDButtonText:
-            text: "SAVE"
-    
-    MDDivider:
-        size_hint_x: .5
-        pos_hint: {"top":.76, "center_x": .5}
+    MDSeparator:
+        pos_hint: {"top": .75}
+        size_hint_y: None
+        height: dp(1)
 
     MDLabel:
-        id: buttons
         text:"Appraisal"
         halign: "center"
-        pos_hint: {"center_y":.7}
-
-    MDButton:
-        style: "outlined"
-        pos_hint: {"top":.65, "center_x": .5}
+        pos_hint: {"center_y":.73}
+    
+    MDRectangleFlatButton:
+        text: "CHECK SHEETS" 
+        pos_hint: {"top":.68, "center_x": .5}
         on_press: root.manager.current = 'check'
-        MDButtonText:
-            text: "CHECK SHEETS"   
+          
 
-    MDButton:
-        style: "outlined"
-        pos_hint: {"top":.55, "center_x": .5}
-        MDButtonText:
-            text: "ANALYSIS"        
+    MDRectangleFlatButton:
+        text: "ANALYSIS"
+        pos_hint: {"top":.61, "center_x": .5}
+              
 
-    MDDivider:
-        size_hint_x: .5
-        pos_hint: {"top":.45, "center_x": .5}
+    MDSeparator:
+        pos_hint: {"top":.5, "center_x": .5}
+        size_hint_y: None
+        height: dp(1)  
 
     MDLabel:
-        id: buttons
+        text:"Generate Answer Sheet"
+        halign: "center"
+        pos_hint: {"center_y":.48}
+
+    MDRectangleFlatButton:
+        text: "GENERATE"
+        pos_hint: {"top":.43, "center_x": .5}
+
+    MDLabel:
         text:"Edit Answer Key"
         halign: "center"
-        pos_hint: {"center_y":.4}
+        pos_hint: {"center_y":.3}
 
-    MDButton:
-        style: "outlined"
-        pos_hint: {"top":.35, "center_x": .5}
-        MDButtonText:
-            text: "MULTIPLE CHOICE"
+    MDRectangleFlatButton:
+        text: "MULTIPLE CHOICE"
+        pos_hint: {"top":.24, "center_x": .5}
+            
+    MDRectangleFlatButton:
+        text: "TRUE OR FALSE"
+        pos_hint: {"top":.17, "center_x": .5}
 
-    MDButton:
-        style: "outlined"
-        pos_hint: {"top":.25, "center_x": .5}
-        MDButtonText:
-            text: "TRUE OR FALSE"
+    MDRectangleFlatButton:
+        text: "IDENTIFICATION"
+        pos_hint: {"top":.1, "center_x": .5}
+            
 
-    MDButton:
-        style: "outlined"
-        pos_hint: {"top":.15, "center_x": .5}
-        MDButtonText:
-            text: "IDENTIFICATION"
 
 <CheckScreen>:
     name: 'check'
@@ -153,30 +128,17 @@ CustomScreenManager:
             pos: self.pos
 
     MDTopAppBar:
-        type: "small"
-        size_hint_x: 1
+        title: "QuickMark"
         pos_hint: {"top": 1}
-        
-        MDTopAppBarTitle:
-            text: "QuickMark"
-            theme_text_color: "Custom"
-            text_color: .5, 0, .5, 1
 
     MDIconButton:
         id: camera_icon
         icon: "camera-outline"
-        style: "standard"
-        theme_font_size: "Custom"
-        font_size: "48sp"
-        radius: [self.height / 2, ]
-        size_hint: None, None
-        size: "84dp", "84dp"
         pos_hint: {"top":.2, "center_x": .5}
 
     MDIconButton:
-        id: camera_icon
+        id: back_button
         icon: "arrow-left"
-        style: "standard"
         pos_hint: {"top":.07, "center_x": .5}
         on_press: root.manager.current = 'name'
 '''
@@ -217,4 +179,3 @@ class App(MDApp):
         self.update_label(self.root.get_screen('name').ids.text_field)
 
 App().run()
-
